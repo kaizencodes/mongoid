@@ -63,7 +63,11 @@ module Mongoid
       def lookup(object)
         locale = ::I18n.locale
         if ::I18n.respond_to?(:fallbacks)
-          object[::I18n.fallbacks[locale].map(&:to_s).find{ |loc| object.has_key?(loc) }]
+          if object.is_a?(String)
+            object.to_s
+          else
+            object[::I18n.fallbacks[locale].map(&:to_s).find{ |loc| object.has_key?(loc) }]
+          end
         else
           object[locale.to_s]
         end
